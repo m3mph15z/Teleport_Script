@@ -14,11 +14,11 @@ local function notify(title, text)
     StarterGui:SetCore("SendNotification", {
         Title = title,
         Text = text,
-        Duration = 2
+        Duration = 3
     })
 end
 
-notify("Teleport Script by Memphis", "Teleport executado com sucesso.\nX (Teleportar para o ponto de vista)")
+notify("Teleport Script by Memphis", "Teleport em execução.\n🇽 (Teleport para o ponto de vista)")
 
 local function teleportToLook()
     local character = player.Character
