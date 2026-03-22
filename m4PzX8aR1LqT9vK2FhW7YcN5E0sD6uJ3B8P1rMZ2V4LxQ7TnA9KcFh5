@@ -1,69 +1,68 @@
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local StarterGui = game:GetService("StarterGui")
+local a=Enum.KeyCode.X
+local b=2e3
+local c=1
 
-local player = Players.LocalPlayer
-local camera = workspace.CurrentCamera
+local d=game:GetService("Players")
+local e=game:GetService("UserInputService")
+local f=game:GetService("RunService")
+local g=game:GetService("StarterGui")
 
-local TELEPORT_KEY = Enum.KeyCode.X
-local MAX_DISTANCE = 2e3
-local FREEZE_FRAMES = 1
+local h=d.LocalPlayer
+local i=workspace.CurrentCamera
 
-local function notify(title, text)
-    StarterGui:SetCore("SendNotification", {
-        Title = title,
-        Text = text,
-        Duration = 3
+local function j(k,l)
+    g:SetCore("SendNotification",{
+        Title=k,
+        Text=l,
+        Duration=3
     })
 end
 
-notify("Teleport Script by Memphis", "Teleport em execução.\n🇽 (Teleport para o ponto de vista)")
+j("Teleport Script by Memphis","Teleport em execução.\n🇽 (Teleport para o ponto de vista)")
 
-local function teleportToLook()
-    local character = player.Character
-    if not character then return end
+local function m()
+    local n=h.Character
+    if not n then return end
 
-    local hrp = character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
+    local o=n:FindFirstChild("HumanoidRootPart")
+    if not o then return end
 
-    local origin = camera.CFrame.Position
-    local direction = camera.CFrame.LookVector * MAX_DISTANCE
+    local p=i.CFrame.Position
+    local q=i.CFrame.LookVector * b
 
-    local raycastParams = RaycastParams.new()
-    raycastParams.FilterDescendantsInstances = {character}
-    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+    local r=RaycastParams.new()
+    r.FilterDescendantsInstances={n}
+    r.FilterType=Enum.RaycastFilterType.Blacklist
 
-    local result = workspace:Raycast(origin, direction, raycastParams)
+    local s=workspace:Raycast(p,q,r)
 
-    local targetPos
-    if result then
-        targetPos = result.Position + Vector3.new(0, 3, 0)
+    local t
+    if s then
+        t=s.Position + Vector3.new(0,3,0)
     else
-        targetPos = origin + direction
+        t=p + q
     end
 
-    hrp.CFrame = CFrame.new(targetPos)
+    o.CFrame = CFrame.new(t)
+    o.AssemblyLinearVelocity = Vector3.zero
+    o.AssemblyAngularVelocity = Vector3.zero
 
-    hrp.AssemblyLinearVelocity = Vector3.zero
-    hrp.AssemblyAngularVelocity = Vector3.zero
-
-    local frames = 0
-    local conn
-    conn = RunService.Heartbeat:Connect(function()
-        if frames >= FREEZE_FRAMES then
-            conn:Disconnect()
+    local u=0
+    local v
+    v = f.Heartbeat:Connect(function()
+        if u >= c then
+            v:Disconnect()
             return
         end
-        hrp.AssemblyLinearVelocity = Vector3.zero
-        hrp.AssemblyAngularVelocity = Vector3.zero
-        frames += 1
+        o.AssemblyLinearVelocity = Vector3.zero
+        o.AssemblyAngularVelocity = Vector3.zero
+        u = u + 1
     end)
 end
 
-UserInputService.InputBegan:Connect(function(input, gp)
-    if gp then return end
-    if input.KeyCode == TELEPORT_KEY then
-        teleportToLook()
+e.InputBegan:Connect(function(w,x)
+    if x then return end
+    if w.KeyCode == a then
+        m()
     end
 end)
